@@ -88,7 +88,7 @@ Delta tables were used to provide schema enforcement, transactional writes and s
 
 Dashboard calculations are prepared in the Gold layer to lower repeated processing and provide stable reporting datasets.
 
-### Assumptions
+## Assumptions
 
 - The source file is a CSV with the same headers as the sample CSV
 - The source fill is assumed to be in the given location (data/ingestion) before bronze is run
@@ -117,7 +117,7 @@ Dashboard calculations are prepared in the Gold layer to lower repeated processi
 - Any other, missing or unrecognised value is assigned the gender code `X`.
 
 
-### Setup steps
+## Setup steps
 
 Clone or import the given repository into a Databricks Git folder.
 
@@ -133,7 +133,7 @@ The notebooks are expected to remain at:
 - `src/silver/silver.ipynb`
 - `src/gold/gold.ipynb`
 
-### Catalog configuration
+## Catalog configuration
 
 The pipeline currently uses:
 
@@ -142,11 +142,11 @@ The pipeline currently uses:
 
 The notebooks create the schema if it does not already exist.
 
-### Execution instructions
+## Execution instructions
 
 After confirming the `inputDataTest.csv` file is in the correct location, open the Bronze, Silver and Gold notebooks and run in that order.
 
-### Limitations/Possible future improvements
+## Limitations/Possible future improvements
 
 - The current implimention of the pipeline overwrites data as it is run. In production this should be chnaged to append.
 
@@ -154,9 +154,9 @@ After confirming the `inputDataTest.csv` file is in the correct location, open t
 
 - The pipeline does not currently define or request an explicit source schema.
 
-- No records for debugging/pipeline management, such as number of records dropped at each stage in silver etc exist. A pipeline failure at present would be harder to diagnose
+- No records for debugging/pipeline management, such as number of records dropped at each stage in silver etc exist. A pipeline failure at present would be harder to diagnose.
 
--  checks for dupicate values, e.g duplicate transaction IDs
+- No checks for dupicate values, e.g duplicate transaction IDs.
 
-- No test suit exists to ensure chnages ot the pipeline do not compromise it
+- No test suit exists to ensure changes to the pipeline do not compromise it.
 
