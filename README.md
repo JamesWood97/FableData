@@ -42,7 +42,7 @@ The final cleaned transaction-level dataset is written as the Delta table:
 
 `workspace.fable_data.silver_transactions`
 
-The Silver table retains the detailed transaction records so that different Gold-layer reporting aggregates can be produced without rereading or reprocessing the original .csv file. Records with missing reporting-critical fields are retained in Silver for auditability but are excluded iwthin Gold.
+The Silver table retains the detailed transaction records so that different Gold-layer reporting aggregates can be produced without rereading or reprocessing the original .csv file. Records with missing reporting-critical fields are retained in Silver for auditability but are excluded within Gold.
 
 ### Gold layer
 
@@ -91,7 +91,7 @@ Dashboard calculations are prepared in the Gold layer to lower repeated processi
 ## Assumptions
 
 - The source file is a CSV with the same headers as the sample CSV
-- The source fill is assumed to be in the given location (data/ingestion) before bronze is run
+- The source file is assumed to be in the given location (data/ingestion) before bronze is run
 -`FILE_DATE` is currently interpreted as the date on which the file is
   processed. In production, this would likely be derived from the data source itself
 
@@ -148,15 +148,15 @@ After confirming the `inputDataTest.csv` file is in the correct location, open t
 
 ## Limitations/Possible future improvements
 
-- The current implimention of the pipeline overwrites data as it is run. In production this should be chnaged to append.
+- The current implementation of the pipeline overwrites data as it is run. In production this should be changed to append.
 
-- `FILE_DATE` is currently derived using the date on which the Bronze notebook is run. This is unlikley to be the correct time of file creation.
+- `FILE_DATE` is currently derived using the date on which the Bronze notebook is run. This is unlikely to be the correct time of file creation.
 
 - The pipeline does not currently define or request an explicit source schema.
 
 - No records for debugging/pipeline management, such as number of records dropped at each stage in silver etc exist. A pipeline failure at present would be harder to diagnose.
 
-- No checks for dupicate values, e.g duplicate transaction IDs.
+- No checks for duplicate values, e.g duplicate transaction IDs.
 
-- No test suit exists to ensure changes to the pipeline do not compromise it.
+- No test suite exists to ensure changes to the pipeline do not compromise it.
 
