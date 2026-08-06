@@ -41,6 +41,48 @@
           }
         ]
       }
+    },
+    {
+      "name": "778fcbf0",
+      "displayName": "gold_age_band_metrics",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.fable_data.gold_age_band_metrics",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "274f3414",
+      "displayName": "gold_gender_metrics",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.fable_data.gold_gender_metrics",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
     }
   ],
   "pages": [
@@ -80,12 +122,14 @@
               "encodings": {
                 "x": {
                   "fieldName": "TRANSACTION_DATE",
+                  "displayName": "Transaction Date",
                   "scale": {
                     "type": "temporal"
                   }
                 },
                 "y": {
                   "fieldName": "sum(TRANSACTION_COUNT)",
+                  "displayName": "Total Transactions",
                   "scale": {
                     "type": "quantitative"
                   }
@@ -186,10 +230,1083 @@
             }
           },
           "position": {
+            "x": 1,
+            "y": 6,
+            "width": 6,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "11cd7673",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "6892a96a",
+                  "fields": [
+                    {
+                      "name": "avg(TRANSACTION_COUNT)",
+                      "expression": "AVG(`TRANSACTION_COUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Average Transactions Per Day",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(TRANSACTION_COUNT)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 7,
+            "y": 6,
+            "width": 5,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "d079afc9",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "6892a96a",
+                  "fields": [
+                    {
+                      "name": "avg(UNIQUE_CUSTOMERS)",
+                      "expression": "AVG(`UNIQUE_CUSTOMERS`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Average Unique Customers Per Day",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(UNIQUE_CUSTOMERS)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 7,
+            "y": 10,
+            "width": 5,
+            "height": 4
+          }
+        },
+        {
+          "widget": {
+            "name": "b817fb3b",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "6892a96a",
+                  "fields": [
+                    {
+                      "name": "avg(TOTAL_TRANSACTION_AMOUNT)",
+                      "expression": "AVG(`TOTAL_TRANSACTION_AMOUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Average Transaction Amount",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(TOTAL_TRANSACTION_AMOUNT)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
             "x": 7,
             "y": 2,
             "width": 5,
             "height": 4
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "11ea29fd",
+      "displayName": "Country Breakdown",
+      "layout": [
+        {
+          "widget": {
+            "name": "transactions_by_country",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3763414e",
+                  "fields": [
+                    {
+                      "name": "COUNTRY_CODE",
+                      "expression": "`COUNTRY_CODE`"
+                    },
+                    {
+                      "name": "sum(TRANSACTION_COUNT)",
+                      "expression": "SUM(`TRANSACTION_COUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Transactions by Country",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "COUNTRY_CODE",
+                  "displayName": "Country",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(TRANSACTION_COUNT)",
+                  "displayName": "Total Transactions",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "COUNTRY_CODE",
+                  "displayName": "Country",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "revenue_by_country",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3763414e",
+                  "fields": [
+                    {
+                      "name": "COUNTRY_CODE",
+                      "expression": "`COUNTRY_CODE`"
+                    },
+                    {
+                      "name": "sum(TOTAL_TRANSACTION_AMOUNT)",
+                      "expression": "SUM(`TOTAL_TRANSACTION_AMOUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Revenue by Country",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "COUNTRY_CODE",
+                  "displayName": "Country",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(TOTAL_TRANSACTION_AMOUNT)",
+                  "displayName": "Total Transaction Amount",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "COUNTRY_CODE",
+                  "displayName": "Country",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "country_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3763414e",
+                  "fields": [
+                    {
+                      "name": "COUNTRY_CODE",
+                      "expression": "`COUNTRY_CODE`"
+                    },
+                    {
+                      "name": "sum(TRANSACTION_COUNT)",
+                      "expression": "SUM(`TRANSACTION_COUNT`)"
+                    },
+                    {
+                      "name": "sum(TOTAL_TRANSACTION_AMOUNT)",
+                      "expression": "SUM(`TOTAL_TRANSACTION_AMOUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Country Metrics Table",
+                "showTitle": true
+              },
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "COUNTRY_CODE",
+                    "displayName": "Country"
+                  },
+                  {
+                    "fieldName": "sum(TRANSACTION_COUNT)",
+                    "displayName": "Total Transactions"
+                  },
+                  {
+                    "fieldName": "sum(TOTAL_TRANSACTION_AMOUNT)",
+                    "displayName": "Total Transaction Amount"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 6,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "total_countries",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3763414e",
+                  "fields": [
+                    {
+                      "name": "countdistinct(COUNTRY_CODE)",
+                      "expression": "COUNT(DISTINCT `COUNTRY_CODE`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Countries",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "countdistinct(COUNTRY_CODE)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 8,
+            "width": 6,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "avg_amount",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3763414e",
+                  "fields": [
+                    {
+                      "name": "avg(AVERAGE_TRANSACTION_AMOUNT)",
+                      "expression": "AVG(`AVERAGE_TRANSACTION_AMOUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Avg Transaction Amount",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(AVERAGE_TRANSACTION_AMOUNT)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 11,
+            "width": 6,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "date_filter",
+            "queries": [
+              {
+                "name": "dashboards/01f19128e50d1b3b83ee5675a2af97fc/datasets/01f191298a891cd09dd3dd7643b8188b_TRANSACTION_DATE",
+                "query": {
+                  "datasetName": "3763414e",
+                  "fields": [
+                    {
+                      "name": "TRANSACTION_DATE",
+                      "expression": "`TRANSACTION_DATE`"
+                    },
+                    {
+                      "name": "TRANSACTION_DATE_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Select Date Range",
+                "showTitle": true
+              },
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "TRANSACTION_DATE",
+                    "queryName": "dashboards/01f19128e50d1b3b83ee5675a2af97fc/datasets/01f191298a891cd09dd3dd7643b8188b_TRANSACTION_DATE"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "81198391",
+      "displayName": "Age Breakdown",
+      "layout": [
+        {
+          "widget": {
+            "name": "transactions_by_age",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "778fcbf0",
+                  "fields": [
+                    {
+                      "name": "AGE_BAND",
+                      "expression": "`AGE_BAND`"
+                    },
+                    {
+                      "name": "sum(TRANSACTION_COUNT)",
+                      "expression": "SUM(`TRANSACTION_COUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Transactions by Age Band",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "AGE_BAND",
+                  "displayName": "Age Band",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(TRANSACTION_COUNT)",
+                  "displayName": "Total Transactions",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "AGE_BAND",
+                  "displayName": "Age Band",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "date_filter",
+            "queries": [
+              {
+                "name": "dashboards/01f19128e50d1b3b83ee5675a2af97fc/datasets/01f19131de551fbaaa975347d1e443ce_TRANSACTION_DATE",
+                "query": {
+                  "datasetName": "778fcbf0",
+                  "fields": [
+                    {
+                      "name": "TRANSACTION_DATE",
+                      "expression": "`TRANSACTION_DATE`"
+                    },
+                    {
+                      "name": "TRANSACTION_DATE_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Select Date Range",
+                "showTitle": true
+              },
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "TRANSACTION_DATE",
+                    "queryName": "dashboards/01f19128e50d1b3b83ee5675a2af97fc/datasets/01f19131de551fbaaa975347d1e443ce_TRANSACTION_DATE"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "revenue_by_age",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "778fcbf0",
+                  "fields": [
+                    {
+                      "name": "AGE_BAND",
+                      "expression": "`AGE_BAND`"
+                    },
+                    {
+                      "name": "sum(TOTAL_TRANSACTION_AMOUNT)",
+                      "expression": "SUM(`TOTAL_TRANSACTION_AMOUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Revenue by Age Band",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "AGE_BAND",
+                  "displayName": "Age Band",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(TOTAL_TRANSACTION_AMOUNT)",
+                  "displayName": "Total Transaction Amount",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "AGE_BAND",
+                  "displayName": "Age Band",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "age_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "778fcbf0",
+                  "fields": [
+                    {
+                      "name": "AGE_BAND",
+                      "expression": "`AGE_BAND`"
+                    },
+                    {
+                      "name": "sum(TRANSACTION_COUNT)",
+                      "expression": "SUM(`TRANSACTION_COUNT`)"
+                    },
+                    {
+                      "name": "sum(TOTAL_TRANSACTION_AMOUNT)",
+                      "expression": "SUM(`TOTAL_TRANSACTION_AMOUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Age Band Metrics Table",
+                "showTitle": true
+              },
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "AGE_BAND",
+                    "displayName": "Age Band"
+                  },
+                  {
+                    "fieldName": "sum(TRANSACTION_COUNT)",
+                    "displayName": "Total Transactions"
+                  },
+                  {
+                    "fieldName": "sum(TOTAL_TRANSACTION_AMOUNT)",
+                    "displayName": "Total Transaction Amount"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 6,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "total_age_bands",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "778fcbf0",
+                  "fields": [
+                    {
+                      "name": "countdistinct(AGE_BAND)",
+                      "expression": "COUNT(DISTINCT `AGE_BAND`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Age Bands",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "countdistinct(AGE_BAND)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 8,
+            "width": 6,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "avg_amount",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "778fcbf0",
+                  "fields": [
+                    {
+                      "name": "avg(AVERAGE_TRANSACTION_AMOUNT)",
+                      "expression": "AVG(`AVERAGE_TRANSACTION_AMOUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Avg Transaction Amount",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(AVERAGE_TRANSACTION_AMOUNT)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 11,
+            "width": 6,
+            "height": 3
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "f681e5e7",
+      "displayName": "Gender Breakdown",
+      "layout": [
+        {
+          "widget": {
+            "name": "transactions_by_gender",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "274f3414",
+                  "fields": [
+                    {
+                      "name": "GENDER_CODE",
+                      "expression": "`GENDER_CODE`"
+                    },
+                    {
+                      "name": "sum(TRANSACTION_COUNT)",
+                      "expression": "SUM(`TRANSACTION_COUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Transactions by Gender",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "GENDER_CODE",
+                  "displayName": "Gender",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(TRANSACTION_COUNT)",
+                  "displayName": "Total Transactions",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "GENDER_CODE",
+                  "displayName": "Gender",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "date_filter",
+            "queries": [
+              {
+                "name": "dashboards/01f19128e50d1b3b83ee5675a2af97fc/datasets/01f19132e3af110baed2533a9189e989_TRANSACTION_DATE",
+                "query": {
+                  "datasetName": "274f3414",
+                  "fields": [
+                    {
+                      "name": "TRANSACTION_DATE",
+                      "expression": "`TRANSACTION_DATE`"
+                    },
+                    {
+                      "name": "TRANSACTION_DATE_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Select Date Range",
+                "showTitle": true
+              },
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "TRANSACTION_DATE",
+                    "queryName": "dashboards/01f19128e50d1b3b83ee5675a2af97fc/datasets/01f19132e3af110baed2533a9189e989_TRANSACTION_DATE"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "revenue_by_gender",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "274f3414",
+                  "fields": [
+                    {
+                      "name": "GENDER_CODE",
+                      "expression": "`GENDER_CODE`"
+                    },
+                    {
+                      "name": "sum(TOTAL_TRANSACTION_AMOUNT)",
+                      "expression": "SUM(`TOTAL_TRANSACTION_AMOUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Revenue by Gender",
+                "showTitle": true
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "GENDER_CODE",
+                  "displayName": "Gender",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(TOTAL_TRANSACTION_AMOUNT)",
+                  "displayName": "Total Transaction Amount",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "GENDER_CODE",
+                  "displayName": "Gender",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "gender_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "274f3414",
+                  "fields": [
+                    {
+                      "name": "GENDER_CODE",
+                      "expression": "`GENDER_CODE`"
+                    },
+                    {
+                      "name": "sum(TRANSACTION_COUNT)",
+                      "expression": "SUM(`TRANSACTION_COUNT`)"
+                    },
+                    {
+                      "name": "sum(TOTAL_TRANSACTION_AMOUNT)",
+                      "expression": "SUM(`TOTAL_TRANSACTION_AMOUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Gender Metrics Table",
+                "showTitle": true
+              },
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "GENDER_CODE",
+                    "displayName": "Gender"
+                  },
+                  {
+                    "fieldName": "sum(TRANSACTION_COUNT)",
+                    "displayName": "Total Transactions"
+                  },
+                  {
+                    "fieldName": "sum(TOTAL_TRANSACTION_AMOUNT)",
+                    "displayName": "Total Transaction Amount"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 6,
+            "width": 6,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "avg_amount",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "274f3414",
+                  "fields": [
+                    {
+                      "name": "avg(AVERAGE_TRANSACTION_AMOUNT)",
+                      "expression": "AVG(`AVERAGE_TRANSACTION_AMOUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Avg Transaction Amount",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(AVERAGE_TRANSACTION_AMOUNT)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 8,
+            "width": 6,
+            "height": 3
           }
         }
       ],
