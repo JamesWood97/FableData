@@ -23,7 +23,7 @@ The Silver layer cleans, standardises and enriches the data. The transformations
 
 First, the source column names are renamed to match the target database schema and given naming convention. For example, `record_id` becomes `RECORD_ID`, `Txn_Description` becomes `ORIGINAL_DESCRIPTION_TEXT`, and `customer_postcode` becomes `POSTCODE`.
 
-The transaction and posting date fields are then converted from strings into Spark date values. Numeric fields are also cast to their expected types. `RECORD_ID` is converted to an integer and `TRANSACTION_AMOUNT` is converted to a decimal value. `try_cast` is used so that invalid values become null instead of causing the entire pipeline to fail.
+The transaction and posting date fields are then converted from strings into dates. Numeric fields are also cast to their expected types. `RECORD_ID` is converted to an integer and `TRANSACTION_AMOUNT` is converted to a decimal value. `try_cast` is used so that invalid values become null instead of causing the entire pipeline to fail.
 
 Malformed rows are removed where `RECORD_ID` contains a non-numeric value and the remaining business fields are empty. This handles corrupted records found within the data.
 
