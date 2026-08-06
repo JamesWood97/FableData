@@ -1,0 +1,206 @@
+{
+  "datasets": [
+    {
+      "name": "6892a96a",
+      "displayName": "gold_daily_metrics",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.fable_data.gold_daily_metrics",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "3763414e",
+      "displayName": "gold_country_metrics",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.fable_data.gold_country_metrics",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    }
+  ],
+  "pages": [
+    {
+      "name": "d60ca603",
+      "displayName": "Total transactions",
+      "layout": [
+        {
+          "widget": {
+            "name": "ee692518",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "6892a96a",
+                  "fields": [
+                    {
+                      "name": "TRANSACTION_DATE",
+                      "expression": "`TRANSACTION_DATE`"
+                    },
+                    {
+                      "name": "sum(TRANSACTION_COUNT)",
+                      "expression": "SUM(`TRANSACTION_COUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Transaction Count Trend",
+                "showTitle": true
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "TRANSACTION_DATE",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(TRANSACTION_COUNT)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 0,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "date_filter",
+            "queries": [
+              {
+                "name": "dashboards/01f19128e50d1b3b83ee5675a2af97fc/datasets/01f19128fb7319e18d51c1a9f318d757_TRANSACTION_DATE",
+                "query": {
+                  "datasetName": "6892a96a",
+                  "fields": [
+                    {
+                      "name": "TRANSACTION_DATE",
+                      "expression": "`TRANSACTION_DATE`"
+                    },
+                    {
+                      "name": "TRANSACTION_DATE_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Select Date Range",
+                "showTitle": true
+              },
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "TRANSACTION_DATE",
+                    "queryName": "dashboards/01f19128e50d1b3b83ee5675a2af97fc/datasets/01f19128fb7319e18d51c1a9f318d757_TRANSACTION_DATE"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 7,
+            "y": 0,
+            "width": 5,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "total_transactions",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "6892a96a",
+                  "fields": [
+                    {
+                      "name": "sum(TRANSACTION_COUNT)",
+                      "expression": "SUM(`TRANSACTION_COUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Total Transactions",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(TRANSACTION_COUNT)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 7,
+            "y": 2,
+            "width": 5,
+            "height": 4
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
