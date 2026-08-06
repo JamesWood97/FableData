@@ -13,18 +13,15 @@ The solution uses a medallion architecture:
 
 ### Bronze layer
 
-The Bronze layer reads the source CSV without applying sny
-transformations. It adds ingestion metadata, including the file date (at present derived from ingestion date) and
-ingestion timestamp. It then writes the data to a table
+The Bronze layer reads the source CSV without applying any transformations. It adds ingestion metadata, including the file date (at present derived from ingestion date) and ingestion timestamp. It then writes the data to a table
 
-The purpose of this layer is to preserve the source representation and
-support reprocessing and auditing.
+The purpose of this layer is to preserve the source representation and support any reprocessing or debugging.
 
 ### Silver layer
 
 The Silver layer cleans, standardises and enriches the data. The transformations are applied in the following order:
 
-First, the source column names are renamed to match the target database schema and naming convention. For example, `record_id` becomes `RECORD_ID`, `Txn_Description` becomes `ORIGINAL_DESCRIPTION_TEXT`, and `customer_postcode` becomes `POSTCODE`.
+First, the source column names are renamed to match the target database schema and given naming convention. For example, `record_id` becomes `RECORD_ID`, `Txn_Description` becomes `ORIGINAL_DESCRIPTION_TEXT`, and `customer_postcode` becomes `POSTCODE`.
 
 The transaction and posting date fields are then converted from strings into Spark date values. Numeric fields are also cast to their expected types. `RECORD_ID` is converted to an integer and `TRANSACTION_AMOUNT` is converted to a decimal value. `try_cast` is used so that invalid values become null instead of causing the entire pipeline to fail.
 
@@ -49,7 +46,7 @@ The Silver table retains the detailed transaction records so that different Gold
 
 ### Gold layer
 
-The Gold layer prepares reporting-ready datasets for use in the Databricks dashboard. It reads the cleaned transaction-level data from the Silver table and produces smaller aggregated Delta tables for specific purposes.
+The Gold layer prepares report ready datasets for use in the dashboard. It reads the cleaned data from the Silver table and produces smaller aggregated Delta tables for specific purposes.
 
 Before calculating the aggregates, records are filtered to ensure that `TRANSACTION_AMOUNT`, `TRANSACTION_DATE` and `CUSTOMER_KEY` are present. These fields are required for calculating transaction values, date-based trends and customer metrics.
 
@@ -85,10 +82,81 @@ ingestion, transformations and reporting logic independent.
 
 ### Delta format
 
-Delta tables were used to provide schema enforcement, transactional writes
-and support for future incremental processing.
+Delta tables were used to provide schema enforcement, transactional writes and support for future incremental processing.
 
 ### Gold aggregate tables
 
-Dashboard calculations are prepared in the Gold layer to reduce repeated
-processing and provide stable reporting datasets.
+Dashboard calculations are prepared in the Gold layer to lower repeated processing and provide stable reporting datasets.
+
+### Assumptions
+
+- The source file is a CSV with the same headers as the sample CSV
+- The source fill is assumed to be in the given location (data/ingestion) before bronze is run
+-`FILE_DATE` is currently interpreted as the date on which the file is
+  processed. In production, this would likely be derived from the data source itself
+
+  `RECORD_ID` is expected to contain a numeric identifier.
+- `TRANSACTION_AMOUNT` is expected to be representable as a decimal value with
+  two decimal places.
+- Invalid numeric values are converted to null rather than causing the entire
+  pipeline to fail.
+- Source columns are initially read as strings so that type conversion and
+  invalid-value handling can be controlled in the Silver layer.
+
+ - A row is considered malformed when `RECORD_ID` contains a non-numeric value
+  and all other relevant business fields are null or empty.
+- A non-numeric `RECORD_ID` does not by itself cause a row to be removed if
+  other data is present.
+  
+- Some malformed age bands are assumed to contain one erroneous leading
+  character and can therefore be corrected by removing that character.
+
+
+- Values such as `M`, `MALE` and `MA` are treated as male.
+- Values such as `F`, `FEMALE` and `FE` are treated as female.
+- Any other, missing or unrecognised value is assigned the gender code `X`.
+
+
+### Setup steps
+
+Clone or import the given repository into a Databricks Git folder.
+
+The existing folder structure should be retained because the Bronze notebook uses a repository relative path to locate the supplied CSV file.
+
+The input file must be available at:
+
+`data/ingestion/inputDataTest.csv`
+
+The notebooks are expected to remain at:
+
+- `src/bronze/bronze.ipynb`
+- `src/silver/silver.ipynb`
+- `src/gold/gold.ipynb`
+
+### Catalog configuration
+
+The pipeline currently uses:
+
+- Catalog: `workspace`
+- Schema: `fable_data`
+
+The notebooks create the schema if it does not already exist.
+
+### Execution instructions
+
+After confirming the `inputDataTest.csv` file is in the correct location, open the Bronze, Silver and Gold notebooks and run in that order.
+
+### Limitations/Possible future improvements
+
+- The current implimention of the pipeline overwrites data as it is run. In production this should be chnaged to append.
+
+- `FILE_DATE` is currently derived using the date on which the Bronze notebook is run. This is unlikley to be the correct time of file creation.
+
+- The pipeline does not currently define or request an explicit source schema.
+
+- No records for debugging/pipeline management, such as number of records dropped at each stage in silver etc exist. A pipeline failure at present would be harder to diagnose
+
+-  checks for dupicate values, e.g duplicate transaction IDs
+
+- No test suit exists to ensure chnages ot the pipeline do not compromise it
+

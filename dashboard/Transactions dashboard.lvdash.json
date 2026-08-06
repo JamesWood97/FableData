@@ -83,6 +83,91 @@
           }
         ]
       }
+    },
+    {
+      "name": "eu_filter",
+      "displayName": "EU Filter Options",
+      "queryLines": [
+        "SELECT DISTINCT\n",
+        "  EU_FLAG,\n",
+        "  CASE\n",
+        "    WHEN EU_FLAG = true THEN 'EU Countries'\n",
+        "    WHEN EU_FLAG = false THEN 'Non-EU Countries'\n",
+        "    ELSE 'Unknown'\n",
+        "  END AS EU_LABEL,\n",
+        "  COUNTRY_CODE,\n",
+        "  TRANSACTION_DATE\n",
+        "FROM\n",
+        "  workspace.fable_data.silver_transactions\n",
+        "WHERE\n",
+        "  EU_FLAG IS NOT NULL"
+      ],
+      "catalog": "workspace",
+      "schema": "fable_data"
+    },
+    {
+      "name": "country_metrics_updated",
+      "displayName": "gold_country_metrics",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.fable_data.gold_country_metrics",
+        "dimensions": [
+          {
+            "expr": "source.*"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "displayName": "Count"
+          }
+        ]
+      }
+    },
+    {
+      "name": "country_with_eu",
+      "displayName": "Country Metrics with EU Flag",
+      "queryLines": [
+        "SELECT\n",
+        "  TRANSACTION_DATE,\n",
+        "  COUNTRY_CODE,\n",
+        "  EU_FLAG,\n",
+        "  TRANSACTION_COUNT,\n",
+        "  TOTAL_TRANSACTION_AMOUNT,\n",
+        "  AVERAGE_TRANSACTION_AMOUNT,\n",
+        "  UNIQUE_CUSTOMERS\n",
+        "FROM\n",
+        "  workspace.fable_data.gold_country_metrics"
+      ]
+    },
+    {
+      "name": "eu_status_filter",
+      "displayName": "EU Status Options",
+      "queryLines": [
+        "SELECT DISTINCT\n",
+        "  EU_FLAG,\n",
+        "  CASE\n",
+        "    WHEN EU_FLAG = true THEN 'EU Countries'\n",
+        "    WHEN EU_FLAG = false THEN 'Non-EU Countries'\n",
+        "  END AS EU_LABEL\n",
+        "FROM\n",
+        "  workspace.fable_data.gold_country_metrics\n",
+        "WHERE\n",
+        "  EU_FLAG IS NOT NULL\n",
+        "ORDER BY\n",
+        "  EU_FLAG DESC"
+      ]
+    },
+    {
+      "name": "country_with_eu_flag",
+      "displayName": "Country Metrics",
+      "queryLines": [
+        "SELECT\n",
+        "  *\n",
+        "FROM\n",
+        "  workspace.fable_data.gold_country_metrics"
+      ]
     }
   ],
   "pages": [
@@ -364,6 +449,49 @@
             "width": 5,
             "height": 4
           }
+        },
+        {
+          "widget": {
+            "name": "4904bf5a",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "6892a96a",
+                  "fields": [
+                    {
+                      "name": "avg(AVERAGE_TRANSACTION_AMOUNT)",
+                      "expression": "AVG(`AVERAGE_TRANSACTION_AMOUNT`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "Average Transaction Amount",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "avg(AVERAGE_TRANSACTION_AMOUNT)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 10,
+            "width": 6,
+            "height": 4
+          }
         }
       ],
       "pageType": "PAGE_TYPE_CANVAS",
@@ -564,92 +692,6 @@
         },
         {
           "widget": {
-            "name": "total_countries",
-            "queries": [
-              {
-                "name": "main_query",
-                "query": {
-                  "datasetName": "3763414e",
-                  "fields": [
-                    {
-                      "name": "countdistinct(COUNTRY_CODE)",
-                      "expression": "COUNT(DISTINCT `COUNTRY_CODE`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "version": 2,
-              "frame": {
-                "title": "Total Countries",
-                "showTitle": true
-              },
-              "widgetType": "counter",
-              "encodings": {
-                "value": {
-                  "fieldName": "countdistinct(COUNTRY_CODE)",
-                  "rowNumber": 0
-                }
-              },
-              "data": {
-                "queryName": "main_query"
-              }
-            }
-          },
-          "position": {
-            "x": 6,
-            "y": 8,
-            "width": 6,
-            "height": 3
-          }
-        },
-        {
-          "widget": {
-            "name": "avg_amount",
-            "queries": [
-              {
-                "name": "main_query",
-                "query": {
-                  "datasetName": "3763414e",
-                  "fields": [
-                    {
-                      "name": "avg(AVERAGE_TRANSACTION_AMOUNT)",
-                      "expression": "AVG(`AVERAGE_TRANSACTION_AMOUNT`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "version": 2,
-              "frame": {
-                "title": "Avg Transaction Amount",
-                "showTitle": true
-              },
-              "widgetType": "counter",
-              "encodings": {
-                "value": {
-                  "fieldName": "avg(AVERAGE_TRANSACTION_AMOUNT)",
-                  "rowNumber": 0
-                }
-              },
-              "data": {
-                "queryName": "main_query"
-              }
-            }
-          },
-          "position": {
-            "x": 6,
-            "y": 11,
-            "width": 6,
-            "height": 3
-          }
-        },
-        {
-          "widget": {
             "name": "date_filter",
             "queries": [
               {
@@ -692,6 +734,52 @@
             "y": 0,
             "width": 6,
             "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "eu_status_filter",
+            "queries": [
+              {
+                "name": "dashboards/01f19128e50d1b3b83ee5675a2af97fc/datasets/01f191298a891cd09dd3dd7643b8188b_EU_FLAG",
+                "query": {
+                  "datasetName": "3763414e",
+                  "fields": [
+                    {
+                      "name": "EU_FLAG",
+                      "expression": "`EU_FLAG`"
+                    },
+                    {
+                      "name": "EU_FLAG_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "EU Status",
+                "showTitle": true
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "EU_FLAG",
+                    "queryName": "dashboards/01f19128e50d1b3b83ee5675a2af97fc/datasets/01f191298a891cd09dd3dd7643b8188b_EU_FLAG"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 8,
+            "width": 2,
+            "height": 3
           }
         }
       ],
@@ -979,49 +1067,6 @@
             "width": 6,
             "height": 3
           }
-        },
-        {
-          "widget": {
-            "name": "avg_amount",
-            "queries": [
-              {
-                "name": "main_query",
-                "query": {
-                  "datasetName": "778fcbf0",
-                  "fields": [
-                    {
-                      "name": "avg(AVERAGE_TRANSACTION_AMOUNT)",
-                      "expression": "AVG(`AVERAGE_TRANSACTION_AMOUNT`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "version": 2,
-              "frame": {
-                "title": "Avg Transaction Amount",
-                "showTitle": true
-              },
-              "widgetType": "counter",
-              "encodings": {
-                "value": {
-                  "fieldName": "avg(AVERAGE_TRANSACTION_AMOUNT)",
-                  "rowNumber": 0
-                }
-              },
-              "data": {
-                "queryName": "main_query"
-              }
-            }
-          },
-          "position": {
-            "x": 6,
-            "y": 11,
-            "width": 6,
-            "height": 3
-          }
         }
       ],
       "pageType": "PAGE_TYPE_CANVAS",
@@ -1263,50 +1308,7 @@
             "x": 0,
             "y": 6,
             "width": 6,
-            "height": 8
-          }
-        },
-        {
-          "widget": {
-            "name": "avg_amount",
-            "queries": [
-              {
-                "name": "main_query",
-                "query": {
-                  "datasetName": "274f3414",
-                  "fields": [
-                    {
-                      "name": "avg(AVERAGE_TRANSACTION_AMOUNT)",
-                      "expression": "AVG(`AVERAGE_TRANSACTION_AMOUNT`)"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "version": 2,
-              "frame": {
-                "title": "Avg Transaction Amount",
-                "showTitle": true
-              },
-              "widgetType": "counter",
-              "encodings": {
-                "value": {
-                  "fieldName": "avg(AVERAGE_TRANSACTION_AMOUNT)",
-                  "rowNumber": 0
-                }
-              },
-              "data": {
-                "queryName": "main_query"
-              }
-            }
-          },
-          "position": {
-            "x": 6,
-            "y": 8,
-            "width": 6,
-            "height": 3
+            "height": 4
           }
         }
       ],
